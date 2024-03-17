@@ -1,0 +1,32 @@
+package com.example.recipe_searcher.model
+
+enum class Area {
+    None,
+    British,
+    American,
+    French,
+    Canadian,
+    Jamaican,
+    Chinese,
+    Dutch,
+    Egyptian,
+    Greek,
+    Indian,
+    Irish,
+    Italian,
+    Japanese,
+    Kenyan,
+    Malaysian,
+    Mexican,
+    Argentine,
+    Moroccan,
+    Croatian,
+    Portuguese,
+    Russian,
+    Spanish,
+    Thai,
+    Vietnamese,
+    Turkish,
+    Tunisian,
+    Polish
+}

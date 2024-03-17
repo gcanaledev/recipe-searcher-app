@@ -2,10 +2,11 @@ package com.example.recipe_searcher.view_model
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import com.example.recipe_searcher.HTTPCallImplementation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipe_searcher.AreaMeal
+import com.example.recipe_searcher.model.AreaMeal
+import com.example.recipe_searcher.model.Area
+import com.example.recipe_searcher.model.getHttpRequestImplementation
 import kotlinx.coroutines.launch
 
 class RecipeSearcherViewModel: ViewModel() {
@@ -14,7 +15,18 @@ class RecipeSearcherViewModel: ViewModel() {
     val requestState: State<APIRequestState> = _requestState
 
 
-    fun getAreaMeals(){
+    fun getAreaMeals(areaRequested: Area){
+
+        if (areaRequested.toString().isEmpty()) {
+
+            _requestState.value =  _requestState.value.copy(
+                status = RequestStatus.Error,
+                error = "it is necessary to choose a valid country!",
+                requestContent = null
+            )
+
+            return
+        }
 
         viewModelScope.launch {
 
@@ -22,7 +34,7 @@ class RecipeSearcherViewModel: ViewModel() {
 
                 _requestState.value = _requestState.value.copy(
                     status = RequestStatus.Success,
-                    requestContent = HTTPCallImplementation.getResponseObject().areaMeals
+                    requestContent = getHttpRequestImplementation(areaRequested).getResponseObject().meals
                 )
 
             }
@@ -37,7 +49,6 @@ class RecipeSearcherViewModel: ViewModel() {
 
         }
     }
-
 }
 
 data class APIRequestState(var error: String? =  null,
@@ -50,6 +61,5 @@ enum class RequestStatus{
     Loading,
     Error,
     Success,
-    NotAnswered,
     NotRequested
 }
