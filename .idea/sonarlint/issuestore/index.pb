@@ -15,3 +15,5 @@ m
 =app/src/main/java/com/example/recipe_searcher/MainActivity.kt,d\f\dfd0b449ae3e9188a58f0024c420cf685aa80796
 k
 ;app/src/main/java/com/example/recipe_searcher/model/Area.kt,3\d\3d6703de0f7f60b0adfc4661ebaa5740932d26e4
+P
+ app/src/main/AndroidManifest.xml,8\c\8c55c3ccc257e5907959013f99656e4c8ec3903e

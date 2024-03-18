@@ -34,7 +34,7 @@ class RecipeSearcherViewModel: ViewModel() {
 
                 _requestState.value = _requestState.value.copy(
                     status = RequestStatus.Success,
-                    requestContent = getHttpRequestImplementation(areaRequested).getResponseObject().meals
+                    requestContent = getHttpRequestImplementation().getResponseObject(areaRequested.name).meals
                 )
 
             }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -35,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
@@ -47,8 +49,7 @@ class MainScreenView (private val recipeViewModel: RecipeSearcherViewModel) {
 
     private val modifier = Modifier
 
-    private val requestState = recipeViewModel.requestState
-    private val requestStatus = requestState.value.status
+
 
     @Composable
     fun BuildMainRecipeScreen(){
@@ -56,7 +57,7 @@ class MainScreenView (private val recipeViewModel: RecipeSearcherViewModel) {
         var chosenArea by remember { mutableStateOf(Area.None) }
 
         Box{
-            when (requestStatus) {
+            when (recipeViewModel.requestState.value.status) {
 
                 RequestStatus.NotRequested -> {
 
@@ -117,17 +118,17 @@ class MainScreenView (private val recipeViewModel: RecipeSearcherViewModel) {
                 }
 
                 RequestStatus.Error ->{
-                    Toast.makeText(LocalContext.current, requestState.value.error, Toast.LENGTH_LONG).show()
+                    Toast.makeText(LocalContext.current, recipeViewModel.requestState.value.error, Toast.LENGTH_LONG).show()
                 }
 
                 RequestStatus.Success ->{
 
-                    if (requestState.value.requestContent == null){
+                    if (recipeViewModel.requestState.value.requestContent == null){
                         Toast.makeText(LocalContext.current, "na data could be loaded, please try again :(", Toast.LENGTH_LONG).show()
                         return
                     }
 
-                    ShowMealGrid(requestState.value.requestContent!!)
+                    ShowMealGrid(recipeViewModel.requestState.value.requestContent!!)
                 }
             }
 
@@ -139,7 +140,9 @@ class MainScreenView (private val recipeViewModel: RecipeSearcherViewModel) {
 @Composable
 private fun ShowMealGrid(meals: List<AreaMeal>){
 
-    LazyVerticalGrid(columns = GridCells.Fixed(2), modifier = Modifier.fillMaxSize()){
+    LazyVerticalGrid(columns = GridCells.Fixed(2),
+        modifier = Modifier.fillMaxSize()){
+
         items(meals){
             m -> ShowMeal(meal = m)
         }
@@ -153,14 +156,16 @@ private fun ShowMeal(meal: AreaMeal){
     Column(
         Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(40.dp),
         horizontalAlignment = Alignment.CenterHorizontally){
 
-        Image(painter = rememberAsyncImagePainter(meal.strMealThumb), contentDescription = "mealImage")
+        Image(painter = rememberAsyncImagePainter(meal.strMealThumb),
+            contentDescription = "mealImage",
+            modifier = Modifier.size(125.dp).aspectRatio(1f))
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Text(text = meal.strMeal)
+        Text(text = meal.strMeal, textAlign = TextAlign.Center)
     }
 
 }
