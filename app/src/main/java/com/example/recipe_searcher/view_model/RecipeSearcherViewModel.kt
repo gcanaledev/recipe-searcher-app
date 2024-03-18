@@ -17,6 +17,10 @@ class RecipeSearcherViewModel: ViewModel() {
 
     fun getAreaMeals(areaRequested: Area){
 
+        _requestState.value = _requestState.value.copy(
+            status = RequestStatus.Loading,
+        )
+
         if (areaRequested.toString().isEmpty()) {
 
             _requestState.value =  _requestState.value.copy(
