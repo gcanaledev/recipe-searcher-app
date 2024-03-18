@@ -1,6 +1,7 @@
 package com.example.recipe_searcher.view
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -33,7 +37,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.example.recipe_searcher.model.Area
+import com.example.recipe_searcher.model.AreaMeal
 import com.example.recipe_searcher.view_model.RecipeSearcherViewModel
 import com.example.recipe_searcher.view_model.RequestStatus
 
@@ -62,7 +68,10 @@ class MainScreenView (private val recipeViewModel: RecipeSearcherViewModel) {
 
                         Spacer(modifier.height(100.dp))
 
-                        Row (modifier.fillMaxWidth().padding(36.dp, 0.dp),
+                        Row (
+                            modifier
+                                .fillMaxWidth()
+                                .padding(36.dp, 0.dp),
                             horizontalArrangement = Arrangement.SpaceBetween) {
 
                             Box {
@@ -113,12 +122,47 @@ class MainScreenView (private val recipeViewModel: RecipeSearcherViewModel) {
 
                 RequestStatus.Success ->{
 
+                    if (requestState.value.requestContent == null){
+                        Toast.makeText(LocalContext.current, "na data could be loaded, please try again :(", Toast.LENGTH_LONG).show()
+                        return
+                    }
+
+                    ShowMealGrid(requestState.value.requestContent!!)
                 }
             }
 
         }
 
     }
+}
+
+@Composable
+private fun ShowMealGrid(meals: List<AreaMeal>){
+
+    LazyVerticalGrid(columns = GridCells.Fixed(2), modifier = Modifier.fillMaxSize()){
+        items(meals){
+            m -> ShowMeal(meal = m)
+        }
+    }
+
+}
+
+@Composable
+private fun ShowMeal(meal: AreaMeal){
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally){
+
+        Image(painter = rememberAsyncImagePainter(meal.strMealThumb), contentDescription = "mealImage")
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(text = meal.strMeal)
+    }
+
 }
 
 @Preview
