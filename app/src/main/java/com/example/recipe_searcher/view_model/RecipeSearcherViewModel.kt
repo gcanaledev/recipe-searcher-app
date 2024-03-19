@@ -12,10 +12,13 @@ import kotlinx.coroutines.launch
 class RecipeSearcherViewModel: ViewModel() {
 
     private val _requestState = mutableStateOf(APIRequestState())
-    val requestState: State<APIRequestState> = _requestState
+    var requestState: State<APIRequestState> = _requestState
 
+    lateinit var areaName: String
 
     fun getAreaMeals(areaRequested: Area){
+
+        areaName = areaRequested.name
 
         _requestState.value = _requestState.value.copy(
             status = RequestStatus.Loading,

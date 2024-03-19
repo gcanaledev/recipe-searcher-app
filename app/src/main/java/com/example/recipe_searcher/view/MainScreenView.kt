@@ -16,13 +16,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -48,8 +48,6 @@ import com.example.recipe_searcher.view_model.RequestStatus
 class MainScreenView (private val recipeViewModel: RecipeSearcherViewModel) {
 
     private val modifier = Modifier
-
-
 
     @Composable
     fun BuildMainRecipeScreen(){
@@ -128,27 +126,50 @@ class MainScreenView (private val recipeViewModel: RecipeSearcherViewModel) {
                         return
                     }
 
-                    ShowMealGrid(recipeViewModel.requestState.value.requestContent!!)
+                    ShowAreaMealSession(recipeViewModel.requestState.value.requestContent!!, recipeViewModel.areaName)
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun ShowAreaMealSession(meals: List<AreaMeal>, areaName: String){
+
+        Column (modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween){
+
+            Row (modifier = Modifier.padding(8.dp)
+                .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween){
+
+                Text(text = "$areaName receipts!", modifier = Modifier.align(Alignment.CenterVertically).padding(35.dp, 0.dp))
+
+                Box{
+
+                    Button(onClick = { /* TODO, make this button go back to previous screen */} , modifier = Modifier.padding(8.dp)) {  }
+
+                    Icon(imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "arrowBackIcon",
+                        modifier = Modifier.align(Alignment.Center),
+                        tint = Color.White)
                 }
             }
 
-        }
 
+            Divider(color = Color.Black, modifier = Modifier
+                .height(1.dp)
+                .fillMaxWidth())
+
+            LazyVerticalGrid(columns = GridCells.Fixed(2)){
+                items(meals){
+                        m -> ShowMeal(meal = m)
+                }
+            }
+        }
     }
 }
 
-@Composable
-private fun ShowMealGrid(meals: List<AreaMeal>){
 
-    LazyVerticalGrid(columns = GridCells.Fixed(2),
-        modifier = Modifier.fillMaxSize()){
-
-        items(meals){
-            m -> ShowMeal(meal = m)
-        }
-    }
-
-}
 
 @Composable
 private fun ShowMeal(meal: AreaMeal){
@@ -161,7 +182,9 @@ private fun ShowMeal(meal: AreaMeal){
 
         Image(painter = rememberAsyncImagePainter(meal.strMealThumb),
             contentDescription = "mealImage",
-            modifier = Modifier.size(125.dp).aspectRatio(1f))
+            modifier = Modifier
+                .size(125.dp)
+                .aspectRatio(1f))
 
         Spacer(modifier = Modifier.height(8.dp))
 
