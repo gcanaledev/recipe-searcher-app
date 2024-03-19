@@ -28,4 +28,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    // base class summary -> https://tutorials.eu/navigating-libraries-apis-and-remote-content-day-9-android-14-masterclass/
 }
