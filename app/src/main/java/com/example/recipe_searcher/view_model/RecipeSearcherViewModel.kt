@@ -24,7 +24,7 @@ class RecipeSearcherViewModel: ViewModel() {
             status = RequestStatus.Loading,
         )
 
-        if (areaRequested.toString().isEmpty()) {
+        if (areaRequested.toString().isEmpty() || areaRequested == Area.None) {
 
             _requestState.value =  _requestState.value.copy(
                 status = RequestStatus.Error,
