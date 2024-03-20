@@ -1,5 +1,9 @@
 package com.example.recipe_searcher.view
 
+import android.app.Activity
+import android.content.ComponentName
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -135,6 +139,13 @@ class MainScreenView (private val recipeViewModel: RecipeSearcherViewModel) {
     @Composable
     private fun ShowAreaMealSession(meals: List<AreaMeal>, areaName: String){
 
+        val context = LocalContext.current
+        fun resetApplication(){
+            (context as Activity).recreate()
+        }
+
+        // at this moment, i do not learned navigation neither prepared the app to it :( so a found this option to user request request again :)
+
         Column (modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween){
 
@@ -146,7 +157,7 @@ class MainScreenView (private val recipeViewModel: RecipeSearcherViewModel) {
 
                 Box{
 
-                    Button(onClick = { /* TODO, make this button go back to previous screen */} , modifier = Modifier.padding(8.dp)) {  }
+                    Button(onClick = { resetApplication() } , modifier = Modifier.padding(8.dp)) {  }
 
                     Icon(imageVector = Icons.Default.ArrowBack,
                         contentDescription = "arrowBackIcon",
